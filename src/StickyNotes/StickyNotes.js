@@ -1,10 +1,8 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import StickyNoteCard, { CardIdProvider } from "./StickyNoteCard";
+import StickyNoteCard from "./StickyNoteCard";
 
 const StickyNotes = () => {
-
-  const cardId = useContext(CardIdProvider);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [notelist, setNoteList] = useState([]);
@@ -15,7 +13,7 @@ const StickyNotes = () => {
       id: uuidv4(),
       notetitle: title,
       notedescription: description,
-      pin:false 
+      pin: false,
     };
     let updatednotelist = [...notelist, newnote];
     setNoteList(updatednotelist);
@@ -23,38 +21,39 @@ const StickyNotes = () => {
     setDescription("");
     localStorage.setItem("listData", JSON.stringify(updatednotelist));
   };
-
+  
   const handleOnChangeTitle = (e) => {
     const { value } = e.target;
     setTitle(value);
   };
 
   const handleOnChangeDescription = (e) => {
+    e.preventDefault()
     const { value } = e.target;
     setDescription(value);
   };
 
-  const handleOnDeleteItem = useCallback((id) => {
+  const handleOnDeleteItem = (id) => {
     const newlist = notelist.filter((item) => {
       return item.id !== id;
     });
     setNoteList(newlist);
-    // console.log(e);
     localStorage.setItem("listData", JSON.stringify(newlist));
-  });
-
-  const handleOnPinItem=useCallback((id)=>{
-    let selectednote=notelist
-    if(selectednote[id].pin===true){
-      selectednote[id].pin=false
-    }else{
-      selectednote[id].pin=true
+  };
+  
+  const handleOnPinItem = (id) => {
+    let selectednote = notelist;
+    if (selectednote[id].pin === true) {
+      selectednote[id].pin = false;
+    } else {
+      selectednote[id].pin = true;
     }
-    setNoteList(selectednote)
     
-    console.log(notelist);
-  })
-
+    localStorage.setItem("listData", JSON.stringify(notelist));
+    setNoteList(selectednote);
+    window.location.reload()
+  };
+  
   useEffect(() => {
     const storageData = localStorage.getItem("listData");
     if (storageData) {
@@ -68,12 +67,12 @@ const StickyNotes = () => {
       </nav>
       <div>
         <div className="flex flex-row w-[100%]">
-          <h2> </h2>
-          {notelist &&
+        {notelist &&
             notelist.map((value, index) => {
-              return (
-                <div key={index}>
-                  <StickyNoteCard
+              if(value.pin===true){
+                return (
+                    <div key={index}>
+                    <StickyNoteCard
                     title={value.notetitle}
                     description={value.notedescription}
                     id={value.id}
@@ -81,10 +80,31 @@ const StickyNotes = () => {
                     pinindex={index}
                     handleOnDeleteItem={handleOnDeleteItem}
                     handleOnPinItem={handleOnPinItem}
-
+                    />
+                    </div>
+                    )
+                  }
+            })}
+        </div>
+          <h2 className="text-2xl text-center m-2	">Your Notes</h2>
+        <div className="flex flex-row w-[100%]">
+          {notelist &&
+            notelist.map((value, index) => {
+              if(value.pin===false){
+              return (
+                  <div key={index}>
+                  <StickyNoteCard
+                  title={value.notetitle}
+                  description={value.notedescription}
+                  id={value.id}
+                  pin={value.pin}
+                  pinindex={index}
+                  handleOnDeleteItem={handleOnDeleteItem}
+                  handleOnPinItem={handleOnPinItem}
                   />
-                </div>
-              );
+                  </div>
+                  )
+                }
             })}
           <form onSubmit={handleOnSubmit}>
             <div className="p-10 ">
