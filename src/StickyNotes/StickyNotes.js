@@ -6,8 +6,8 @@ const StickyNotes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [notelist, setNoteList] = useState([]);
-  const [pinednotelist, setPinedNoteList] = useState([]);
-  const ref=useRef()
+  const [messageposition, setMessagePosition] = useState("-70px");
+  const ref = useRef();
   const handleOnSubmit = (e) => {
     e.preventDefault();
     let newnote = {
@@ -22,6 +22,7 @@ const StickyNotes = () => {
     setTitle("");
     setDescription("");
     localStorage.setItem("listData", JSON.stringify(updatednotelist));
+    setMessagePosition("0");
   };
   // const handleOnSubmit = (e) => {
   //   e.preventDefault();
@@ -43,7 +44,7 @@ const StickyNotes = () => {
     const { value } = e.target;
     setTitle(value);
   };
-  
+
   const handleOnChangeDescription = (e) => {
     const { value } = e.target;
     setDescription(value);
@@ -79,12 +80,33 @@ const StickyNotes = () => {
     if (storageData) {
       setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
     }
-  },[])
+    console.log(messageposition);
+  }, []);
+
   return (
     <>
       <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between">
         <div className="flex align-center font-serif">Sticky Notes</div>
       </nav>
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: messageposition,
+          transition: "top 0.5s",
+        }}
+      >
+        <div
+          className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-5 shadow-md "
+          role="alert"
+        >
+          <div className="flex">
+            <div>
+              <p className="font-bold">Your Note Saved Successfully</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div>
         <h2 className="text-2xl text-center text-white font-serif ">
           Pined Notes
@@ -103,7 +125,7 @@ const StickyNotes = () => {
                       indexvalue={index}
                       handleOnDeleteItem={handleOnDeleteItem}
                       handleOnPinItem={handleOnPinItem}
-                      edit={value.edit}
+                      setMessagePosition={setMessagePosition}
                     />
                   </div>
                 );
@@ -128,6 +150,7 @@ const StickyNotes = () => {
                       handleOnDeleteItem={handleOnDeleteItem}
                       handleOnPinItem={handleOnPinItem}
                       setNoteList={setNoteList}
+                      setMessagePosition={setMessagePosition}
                     />
                   </div>
                 );
@@ -172,10 +195,7 @@ const StickyNotes = () => {
             </div>
           </form> */}
           <div className="flex align-middle my-auto w-12 h-12 justify-center rounded-full bg-yellow-50  ">
-            <button
-              className="text-5xl"
-              onClick={handleOnSubmit}
-            >
+            <button className="text-5xl" onClick={handleOnSubmit}>
               +
             </button>
           </div>

@@ -15,9 +15,8 @@ const StickyNoteCard = (props) => {
   const [notedescription, setNoteDescription] = useState(props.description);
   // const ref = useRef();
 
-
-  const getNoteId =async (e) => {
-    const { value } =await e.currentTarget;
+  const getNoteId = async (e) => {
+    const { value } = await e.currentTarget;
     let data = JSON.parse(localStorage.getItem("listData"));
     data = await data.filter((item) => {
       return item.id !== value;
@@ -25,9 +24,8 @@ const StickyNoteCard = (props) => {
     localStorage.setItem("listData", JSON.stringify(data));
     props.setNoteList([...data]);
     // props.handleOnDeleteItem(value);
-    window.location.reload()
+    window.location.reload();
   };
-  
 
   const addToPin = (e) => {
     const { value } = e.currentTarget;
@@ -40,9 +38,13 @@ const StickyNoteCard = (props) => {
     data[props.indexvalue].notetitle = notetitle;
     data[props.indexvalue].notedescription = notedescription;
     localStorage.setItem("listData", JSON.stringify(data));
-    props.setNoteList([...data]);
-    
+    // props.setNoteList([...data]);
+    props.setMessagePosition("0px");
+    setTimeout(() => {
+      props.setMessagePosition("-70px");
+    }, 3000);
   };
+
   return (
     <div className=" group w-60 h-56 bg-yellow-100  flex-col p-3 shadow-md rounded ring-1 ring-gray-200">
       <div className="flex justify-end">
