@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import StickyNoteCard from "./StickyNoteCard";
 
@@ -6,13 +6,14 @@ const StickyNotes = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [notelist, setNoteList] = useState([]);
-
+  const [pinednotelist, setPinedNoteList] = useState([]);
+  const ref=useRef()
   const handleOnSubmit = (e) => {
     e.preventDefault();
     let newnote = {
       id: uuidv4(),
-      notetitle: title,
-      notedescription: description,
+      notetitle: "",
+      notedescription: "",
       pin: false,
       edit: false,
     };
@@ -22,6 +23,21 @@ const StickyNotes = () => {
     setDescription("");
     localStorage.setItem("listData", JSON.stringify(updatednotelist));
   };
+  // const handleOnSubmit = (e) => {
+  //   e.preventDefault();
+  //   let newnote = {
+  //     id: uuidv4(),
+  //     notetitle: title,
+  //     notedescription: description,
+  //     pin: false,
+  //     edit: false,
+  //   };
+  //   let updatednotelist = [...notelist, newnote];
+  //   setNoteList(updatednotelist);
+  //   setTitle("");
+  //   setDescription("");
+  //   localStorage.setItem("listData", JSON.stringify(updatednotelist));
+  // };
 
   const handleOnChangeTitle = (e) => {
     const { value } = e.target;
@@ -29,7 +45,6 @@ const StickyNotes = () => {
   };
 
   const handleOnChangeDescription = (e) => {
-    e.preventDefault();
     const { value } = e.target;
     setDescription(value);
   };
@@ -49,27 +64,33 @@ const StickyNotes = () => {
     } else {
       selectednote[id].pin = true;
     }
-
-    localStorage.setItem("listData", JSON.stringify(notelist));
-
+    localStorage.setItem("listData", JSON.stringify(selectednote));
     setNoteList(selectednote);
+    // notelist.map((value) => {
+    //   if (value.pin === true&&notelist[id].id!==value.id) {
+    //     setPinedNoteList([...pinednotelist, value]);
+    //   }
+    // });
     window.location.reload();
   };
-
+  console.log(pinednotelist);
   useEffect(() => {
     const storageData = localStorage.getItem("listData");
     if (storageData) {
       setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
     }
   }, []);
-  
+  // useEffect(() => {
+  //   localStorage.setItem("listData", JSON.stringify(notelist));
+  // }, [notelist]);
+
   return (
     <>
       <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between">
         <div className="flex align-center font-serif">Sticky Notes</div>
       </nav>
       <div>
-        <h2 className="text-2xl text-center text-white font-serif underline">
+        <h2 className="text-2xl text-center text-white font-serif ">
           Pined Notes
         </h2>
         <div className="flex space-x-4 mx-5">
@@ -93,7 +114,7 @@ const StickyNotes = () => {
               }
             })}
         </div>
-        <h2 className="text-2xl text-center m-2	text-white font-serif underline">
+        <h2 className="text-2xl text-center m-2	text-white font-serif ">
           Your Notes
         </h2>
         <div className="flex space-x-4 mx-5">
@@ -110,19 +131,18 @@ const StickyNotes = () => {
                       indexvalue={index}
                       handleOnDeleteItem={handleOnDeleteItem}
                       handleOnPinItem={handleOnPinItem}
+                      setNoteList={setNoteList}
                     />
                   </div>
                 );
               }
             })}
-          <form onSubmit={handleOnSubmit}>
+          {/* <form onSubmit={handleOnSubmit}>
             <div className="px-5 w-72">
-              <div className="h-72 bg-gray-100 flex flex-col p-3 shadow-md rounded ring-1 ring-gray-200">
-                <h2 className="text-2xl font-serif underline">
-                  Add a new Note:-
-                </h2>
+              <div className="h-72 bg-yellow-100 flex flex-col p-3 shadow-md rounded ring-1 ring-gray-200">
+                <h2 className="text-2xl font-serif ">Add a new Note:-</h2>
                 <div>
-                  <label className="font-serif underline">Title:-</label>
+                  <label className="font-serif ">Title:-</label>
                   <br />
                   <input
                     type="text"
@@ -133,7 +153,7 @@ const StickyNotes = () => {
                   />
                 </div>
                 <div>
-                  <label className="font-serif underline">Description:-</label>
+                  <label className="font-serif ">Description:-</label>
                   <br />
                   <textarea
                     type="text"
@@ -154,7 +174,15 @@ const StickyNotes = () => {
                 </div>
               </div>
             </div>
-          </form>
+          </form> */}
+          <div className="flex align-middle my-auto w-12 h-12 justify-center rounded-full bg-yellow-50  ">
+            <button
+              className="text-5xl"
+              onClick={handleOnSubmit}
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
     </>
