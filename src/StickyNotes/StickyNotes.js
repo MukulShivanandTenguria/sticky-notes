@@ -43,18 +43,19 @@ const StickyNotes = () => {
     const { value } = e.target;
     setTitle(value);
   };
-
+  
   const handleOnChangeDescription = (e) => {
     const { value } = e.target;
     setDescription(value);
   };
 
   const handleOnDeleteItem = (id) => {
-    const newlist = notelist.filter((item) => {
+    let newlistdata = notelist.filter((item) => {
       return item.id !== id;
     });
-    setNoteList(newlist);
-    localStorage.setItem("listData", JSON.stringify(newlist));
+    // console.log(id);
+    setNoteList([...newlistdata]);
+    localStorage.setItem("listData", JSON.stringify(newlistdata));
   };
 
   const handleOnPinItem = (id) => {
@@ -65,25 +66,20 @@ const StickyNotes = () => {
       selectednote[id].pin = true;
     }
     localStorage.setItem("listData", JSON.stringify(selectednote));
-    setNoteList(selectednote);
+    setNoteList([...selectednote]);
     // notelist.map((value) => {
     //   if (value.pin === true&&notelist[id].id!==value.id) {
     //     setPinedNoteList([...pinednotelist, value]);
     //   }
     // });
-    window.location.reload();
+    // window.location.reload();
   };
-  console.log(pinednotelist);
   useEffect(() => {
     const storageData = localStorage.getItem("listData");
     if (storageData) {
       setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
     }
-  }, []);
-  // useEffect(() => {
-  //   localStorage.setItem("listData", JSON.stringify(notelist));
-  // }, [notelist]);
-
+  },[])
   return (
     <>
       <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between">
