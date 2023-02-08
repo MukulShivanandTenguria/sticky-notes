@@ -36,11 +36,10 @@ const StickyNoteCard = (props) => {
   };
 
   return (
-    <div className="w-60 h-56 bg-yellow-100  flex-col p-3 shadow-md rounded ring-1 ring-gray-200">
-      <div className="flex justify-between">
-        <div></div>
-        <div className="space-x-2">
-          <button>
+    <div className=" group w-60 h-56 bg-yellow-100  flex-col p-3 shadow-md rounded ring-1 ring-gray-200">
+      <div className="flex justify-end">
+        <div className="space-x-2 invisible group-hover:visible">
+          <button >
             <FontAwesomeIcon color="#ff0000" icon={faEllipsisV} />
           </button>
           <button value={`${props.id}`} onClick={getIndex}>
@@ -72,7 +71,7 @@ const StickyNoteCard = (props) => {
       </div>
       <div className="flex justify-end">
         <button
-          className="bg-red-700 text-white rounded w-16 "
+          className="bg-red-700 text-white rounded w-16 invisible group-hover:visible hover:bg-red-600 "
           value={`${props.indexvalue}`}
           onClick={editNote}
         >
