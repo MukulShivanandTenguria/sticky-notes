@@ -7,6 +7,8 @@ const StickyNotes = () => {
   const [description, setDescription] = useState("");
   const [notelist, setNoteList] = useState([]);
   const [messageposition, setMessagePosition] = useState("-70px");
+  const [pinheading, setPinHeading] = useState(false);
+
   const ref = useRef();
   const handleOnSubmit = (e) => {
     e.preventDefault();
@@ -22,8 +24,8 @@ const StickyNotes = () => {
     setTitle("");
     setDescription("");
     localStorage.setItem("listData", JSON.stringify(updatednotelist));
-    setMessagePosition("0");
   };
+
   // const handleOnSubmit = (e) => {
   //   e.preventDefault();
   //   let newnote = {
@@ -51,12 +53,14 @@ const StickyNotes = () => {
   };
 
   const handleOnDeleteItem = (id) => {
-    let newlistdata = notelist.filter((item) => {
-      return item.id !== id;
-    });
+    // let newlistdata=notelist
+    //  newlistdata = notelist.filter((item) => {
+    //   return item.id !== id;
+    // });
     // console.log(id);
-    setNoteList([...newlistdata]);
-    localStorage.setItem("listData", JSON.stringify(newlistdata));
+    // localStorage.setItem("listData", JSON.stringify(newlistdata));
+    // setNoteList([...newlistdata]);
+    // window.location.reload();
   };
 
   const handleOnPinItem = (id) => {
@@ -75,14 +79,26 @@ const StickyNotes = () => {
     // });
     // window.location.reload();
   };
+
   useEffect(() => {
     const storageData = localStorage.getItem("listData");
     if (storageData) {
       setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
     }
-    console.log(messageposition);
   }, []);
 
+  useEffect(() => {
+    for (let i = 0; i < notelist.length; i++) {
+      if (notelist[i].pin === true) {
+        setPinHeading(true);
+        break;
+      } else {
+        setPinHeading(false);
+      }
+    }
+    console.log("sd");
+  }, [notelist]);
+  
   return (
     <>
       <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between">
@@ -108,9 +124,11 @@ const StickyNotes = () => {
         </div>
       </div>
       <div>
-        <h2 className="text-2xl text-center text-white font-serif ">
-          Pined Notes
-        </h2>
+        {pinheading && (
+          <h2 className="text-2xl text-center text-white font-serif ">
+            Pined Notes
+          </h2>
+        )}
         <div className="flex space-x-4 mx-5">
           {notelist &&
             notelist.map((value, index) => {

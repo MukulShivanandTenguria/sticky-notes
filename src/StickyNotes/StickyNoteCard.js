@@ -15,15 +15,15 @@ const StickyNoteCard = (props) => {
   const [notedescription, setNoteDescription] = useState(props.description);
   // const ref = useRef();
 
-  const getNoteId = async (e) => {
-    const { value } = await e.currentTarget;
+  const getNoteId =  (e) => {
+    const { value } =  e.currentTarget;
     let data = JSON.parse(localStorage.getItem("listData"));
-    data = await data.filter((item) => {
+    data =  data.filter((item) => {
       return item.id !== value;
     });
     localStorage.setItem("listData", JSON.stringify(data));
-    props.setNoteList([...data]);
-    // props.handleOnDeleteItem(value);
+    // props.setNoteList([...data]);
+    // props.handleOnDeleteItem(data);
     window.location.reload();
   };
 
@@ -42,7 +42,7 @@ const StickyNoteCard = (props) => {
     props.setMessagePosition("0px");
     setTimeout(() => {
       props.setMessagePosition("-70px");
-    }, 3000);
+    }, 2000);
   };
 
   return (
@@ -52,7 +52,6 @@ const StickyNoteCard = (props) => {
           <button>
             <FontAwesomeIcon color="#ff0000" icon={faEllipsisV} />
           </button>
-          {/* <button value={`${props.id}`} onClick={(e)=>props.handleOnDeleteItem(e.target.value)}> */}
           <button value={`${props.id}`} onClick={getNoteId}>
             <FontAwesomeIcon color="#ff0000" icon={faTrash} />
           </button>
