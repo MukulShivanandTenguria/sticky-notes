@@ -18,6 +18,7 @@ const StickyNotes = () => {
       notedescription: "",
       pin: false,
       edit: false,
+      
     };
     let updatednotelist = [...notelist, newnote];
     setNoteList(updatednotelist);
