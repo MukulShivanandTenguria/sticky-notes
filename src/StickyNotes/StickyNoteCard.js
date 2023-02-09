@@ -12,20 +12,23 @@ const StickyNoteCard = (props) => {
   const [notetitle, setNotetitle] = useState(props.title);
   const [notedescription, setNoteDescription] = useState(props.description);
   const [visibile, setVisible] = useState("hidden");
-  const [cardcolor, setCardColor] = useState("bg-yellow-100");
-  const [bordercolor, setBorderColor] = useState("border-yellow-100");
+  const [cardcolor, setCardColor] = useState(props.color);
+  const [bordercolor, setBorderColor] = useState(props.color);
   // const ref = useRef();
+
+
+
 
   const getNoteId = (e) => {
     const { value } = e.currentTarget;
-    let data = JSON.parse(localStorage.getItem("listData"));
-    data = data.filter((item) => {
-      return item.id !== value;
-    });
-    localStorage.setItem("listData", JSON.stringify(data));
+    // let data = JSON.parse(localStorage.getItem("listData"));
+    // data = data.filter((item) => {
+    //   return item.id !== value;
+    // });
+    // localStorage.setItem("listData", JSON.stringify(data));
     // props.setNoteList([...data]);
-    // props.handleOnDeleteItem(data);
-    window.location.reload();
+    props.handleOnDeleteItem(value);
+    // window.location.reload();
   };
 
   const addToPin = (e) => {
@@ -33,11 +36,12 @@ const StickyNoteCard = (props) => {
     props.handleOnPinItem(value);
   };
 
-  const editNote = (e) => {
-    const { value } = e.currentTarget;
+  const editNote = () => {
     let data = JSON.parse(localStorage.getItem("listData"));
     data[props.indexvalue].notetitle = notetitle;
     data[props.indexvalue].notedescription = notedescription;
+    data[props.indexvalue].color = cardcolor;
+
     localStorage.setItem("listData", JSON.stringify(data));
     // props.setNoteList([...data]);
     props.setMessagePosition("0px");
@@ -58,11 +62,14 @@ const StickyNoteCard = (props) => {
     setVisible("hidden");
   };
 
-  const changeCardColor = (e) => {
+  const changeCardColor =  (e) => {
     const { value } = e.currentTarget;
+    let data = JSON.parse(localStorage.getItem("listData"))
     setCardColor(value);
+    data[props.indexvalue].color = value;
+    localStorage.setItem("listData", JSON.stringify(data));
   };
-
+  
   return (
     // <div className="bg-blue-100">
     <div className={cardcolor}>

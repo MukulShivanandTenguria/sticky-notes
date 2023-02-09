@@ -3,6 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import StickyNoteCard from "./StickyNoteCard";
 
 const StickyNotes = () => {
+  useEffect(() => {
+    const storageData = localStorage.getItem("listData");
+    if (storageData) {
+      setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
+    }
+  }, []);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [notelist, setNoteList] = useState([]);
@@ -18,7 +24,7 @@ const StickyNotes = () => {
       notedescription: "",
       pin: false,
       edit: false,
-      
+      color:"bg-yellow-100"
     };
     let updatednotelist = [...notelist, newnote];
     setNoteList(updatednotelist);
@@ -54,13 +60,13 @@ const StickyNotes = () => {
   };
 
   const handleOnDeleteItem = (id) => {
-    // let newlistdata=notelist
-    //  newlistdata = notelist.filter((item) => {
-    //   return item.id !== id;
-    // });
-    // console.log(id);
-    // localStorage.setItem("listData", JSON.stringify(newlistdata));
-    // setNoteList([...newlistdata]);
+    let newlistdata=notelist
+     newlistdata = newlistdata.filter((item) => {
+      return item.id !== id;
+    });
+    console.log(newlistdata);
+    setNoteList(newlistdata);
+    localStorage.setItem("listData", JSON.stringify(newlistdata));
     // window.location.reload();
   };
 
@@ -81,12 +87,6 @@ const StickyNotes = () => {
     // window.location.reload();
   };
 
-  useEffect(() => {
-    const storageData = localStorage.getItem("listData");
-    if (storageData) {
-      setNoteList([...JSON.parse(localStorage.getItem("listData"))]);
-    }
-  }, []);
 
   useEffect(() => {
     for (let i = 0; i < notelist.length; i++) {
@@ -97,7 +97,6 @@ const StickyNotes = () => {
         setPinHeading(false);
       }
     }
-    console.log("sd");
   }, [notelist]);
   
   return (
@@ -145,6 +144,7 @@ const StickyNotes = () => {
                       handleOnDeleteItem={handleOnDeleteItem}
                       handleOnPinItem={handleOnPinItem}
                       setMessagePosition={setMessagePosition}
+                      color={value.color}
                     />
                   </div>
                 );
@@ -170,6 +170,7 @@ const StickyNotes = () => {
                       handleOnPinItem={handleOnPinItem}
                       setNoteList={setNoteList}
                       setMessagePosition={setMessagePosition}
+                      color={value.color}
                     />
                   </div>
                 );
