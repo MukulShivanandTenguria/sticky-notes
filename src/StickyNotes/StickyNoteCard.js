@@ -69,10 +69,9 @@ const StickyNoteCard = (props) => {
     data[props.indexvalue].color = value;
     localStorage.setItem("listData", JSON.stringify(data));
   };
-  
   return (
     // <div className="bg-blue-100">
-    <div className={cardcolor}>
+    <div className={`${cardcolor }`}>
       <div
         onMouseLeave={hideColorAlternative}
         className=" group w-60 h-56   flex-col p-3 shadow-md rounded ring-1 ring-gray-200"
@@ -121,6 +120,7 @@ const StickyNoteCard = (props) => {
         </div>
         <div className="mb-1 ">
           <input
+          ref={props.inputFocus}
             className={`my-1 rounded-md  ${cardcolor}  font-bold  focus:border-orange-800 focus:border-[2px]  focus:outline-none h-10 w-full p-2`}
             value={notetitle}
             onChange={(e) => setNotetitle(e.target.value)}

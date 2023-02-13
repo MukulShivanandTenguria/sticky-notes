@@ -15,7 +15,7 @@ const StickyNotes = () => {
   const [messageposition, setMessagePosition] = useState("-70px");
   const [pinheading, setPinHeading] = useState(false);
 
-  const ref = useRef();
+  const inputFocus = useRef();
   const handleOnSubmit = (e) => {
     e.preventDefault();
     let newnote = {
@@ -24,10 +24,11 @@ const StickyNotes = () => {
       notedescription: "",
       pin: false,
       edit: false,
-      color:"bg-yellow-100"
+      color: "bg-yellow-100",
     };
     let updatednotelist = [...notelist, newnote];
     setNoteList(updatednotelist);
+    inputFocus.current.focus()
     setTitle("");
     setDescription("");
     localStorage.setItem("listData", JSON.stringify(updatednotelist));
@@ -60,8 +61,8 @@ const StickyNotes = () => {
   };
 
   const handleOnDeleteItem = (id) => {
-    let newlistdata=notelist
-     newlistdata = newlistdata.filter((item) => {
+    let newlistdata = notelist;
+    newlistdata = newlistdata.filter((item) => {
       return item.id !== id;
     });
     console.log(newlistdata);
@@ -87,7 +88,6 @@ const StickyNotes = () => {
     // window.location.reload();
   };
 
-
   useEffect(() => {
     for (let i = 0; i < notelist.length; i++) {
       if (notelist[i].pin === true) {
@@ -98,12 +98,11 @@ const StickyNotes = () => {
       }
     }
   }, [notelist]);
-  
+
   return (
     <>
-      <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between">
-        <div className="flex align-center font-serif">Sticky Notes</div>
-      </nav>
+      <nav className="bg-gray-800 text-white py-4 px-5 text-3xl flex justify-between fixed w-full ">
+        <div className="flex align-center font-serif sticky">Sticky Notes</div>
       <div
         style={{
           position: "absolute",
@@ -118,12 +117,13 @@ const StickyNotes = () => {
         >
           <div className="flex">
             <div>
-              <p className="font-bold">Your Note Saved Successfully</p>
+              <p className="font-bold text-sm">Your Note Saved Successfully</p>
             </div>
           </div>
         </div>
       </div>
-      <div>
+      </nav>
+      <div className="pt-20">
         {pinheading && (
           <h2 className="text-2xl text-center text-white font-serif ">
             Pined Notes
@@ -145,6 +145,7 @@ const StickyNotes = () => {
                       handleOnPinItem={handleOnPinItem}
                       setMessagePosition={setMessagePosition}
                       color={value.color}
+                      inputFocus={inputFocus}
                     />
                   </div>
                 );
@@ -154,12 +155,12 @@ const StickyNotes = () => {
         <h2 className="text-2xl text-center m-2	text-white font-serif ">
           Your Notes
         </h2>
-        <div className="flex space-x-4 mx-5">
+        <div className="flex flex-wrap mx-5">
           {notelist &&
             notelist.map((value, index) => {
               if (value.pin === false) {
                 return (
-                  <div key={index} className="w-60 ">
+                  <div key={index} className="w-60 m-2">
                     <StickyNoteCard
                       title={value.notetitle}
                       description={value.notedescription}
@@ -171,6 +172,7 @@ const StickyNotes = () => {
                       setNoteList={setNoteList}
                       setMessagePosition={setMessagePosition}
                       color={value.color}
+                      inputFocus={inputFocus}
                     />
                   </div>
                 );
