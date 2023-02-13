@@ -129,12 +129,12 @@ const StickyNotes = () => {
             Pined Notes
           </h2>
         )}
-        <div className="flex space-x-4 mx-5">
+        <div className="flex flex-wrap mx-5">
           {notelist &&
             notelist.map((value, index) => {
               if (value.pin === true) {
                 return (
-                  <div key={index}>
+                  <div key={index} className="w-60 m-2">
                     <StickyNoteCard
                       title={value.notetitle}
                       description={value.notedescription}
@@ -155,7 +155,7 @@ const StickyNotes = () => {
         <h2 className="text-2xl text-center m-2	text-white font-serif ">
           Your Notes
         </h2>
-        <div className="flex flex-wrap mx-5">
+        <div className="flex  flex-wrap mx-5">
           {notelist &&
             notelist.map((value, index) => {
               if (value.pin === false) {
